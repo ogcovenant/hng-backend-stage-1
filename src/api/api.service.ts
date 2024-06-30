@@ -10,7 +10,7 @@ export class ApiService {
 
     return {
       client_ip: ip,
-      location: (await apiResponse).data.city,
+      location: (await apiResponse).data,
       greeting: `Hello ${query.visitor_name}`,
     }
   }
