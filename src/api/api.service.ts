@@ -28,7 +28,7 @@ export class ApiService {
       const temperature = temperatureRaw.hourly.temperature_2m[currentHour] 
 
       // Construct greeting message
-      const greeting = `Hello, ${query.visitor_name}, the temperature is ${temperature} degrees Celsius in ${location}`;
+      const greeting = `Hello, ${(query.visitor_name).replace("\" || \'", "")}, the temperature is ${temperature} degrees Celsius in ${location}`;
 
       // Return response object
       return {
