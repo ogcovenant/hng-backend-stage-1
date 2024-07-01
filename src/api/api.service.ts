@@ -14,7 +14,8 @@ export class ApiService {
 
     const temperature = await fetchWeatherApi('https://api.open-meteo.com/v1/forecast', {
       latitude,
-      longitude
+      longitude,
+      hourly: "temperature_2m"
     })
 
     return {
