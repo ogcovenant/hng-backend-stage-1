@@ -4,24 +4,34 @@ import axios from 'axios';
 
 @Injectable()
 export class ApiService {
-  async hello(query: RequestDTO, ip: string){
-
-    const geoData = await axios.get(`https://get.geojs.io/v1/ip/geo/${ip}.json`);
+  async hello(query: RequestDTO, ip: string) {
+    const geoData = await axios.get(
+      `https://get.geojs.io/v1/ip/geo/${ip}.json`,
+    );
 
     const latitude = geoData.data.latitude;
-    const longitude = geoData.data.longitude; 
+    const longitude = geoData.data.longitude;
 
     try {
-      const temperature = await axios.get(`https://api.openweathermap.org/data/3.0/onecall?lat=${latitude}&lon=${longitude}&appid=${process.env.OPEN_WEATHER_API_KEY}`)
+      const temperature = await axios.get(
+        'https://api.open-meteo.com/v1/forecast',
+        {
+          data: {
+            latitude,
+            longitude,
+            hourly: 'temperature_2m',
+          },
+        },
+      );
 
       return {
         client_ip: ip,
         location: geoData.data.city,
         temperature,
-        greeting: `Hello, ${(query.visitor_name).replace('\" || \'', "")}, the temperature is ${temperature.data.hourly[0].temp} degrees Celcius in New York`,
-      }
-    }catch(err) {
-      console.log(err)
+        greeting: `Hello, ${query.visitor_name.replace('" || \'', '')}, the temperature is ${temperature.data.current.temp} degrees Celcius in New York`,
+      };
+    } catch (err) {
+      console.log(err);
     }
   }
 }
