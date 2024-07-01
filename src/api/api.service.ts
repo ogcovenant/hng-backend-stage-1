@@ -6,7 +6,7 @@ import axios from 'axios';
 export class ApiService {
   async hello(query: RequestDTO, ip: string){
 
-    const apiResponse = axios.get(`http://ip-api.com/json/${ip}`);
+    const apiResponse = axios.get(`http://ipapi.co/json/`);
 
     return {
       client_ip: ip,
