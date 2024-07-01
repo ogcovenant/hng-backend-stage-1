@@ -5,33 +5,40 @@ import axios from 'axios';
 @Injectable()
 export class ApiService {
   async hello(query: RequestDTO, ip: string) {
-    const geoData = await axios.get(
-      `https://get.geojs.io/v1/ip/geo/${ip}.json`,
-    );
-
-    const latitude = geoData.data.latitude;
-    const longitude = geoData.data.longitude;
-
     try {
-      const temperature = await axios.get(
-        'https://api.open-meteo.com/v1/forecast',
-        {
-          data: {
-            latitude,
-            longitude,
-            hourly: 'temperature_2m',
-          },
-        },
-      );
+      // Fetch geolocation data
+      const geoResponse = await axios.get(`https://get.geojs.io/v1/ip/geo/${ip}.json`);
+      const location = geoResponse.data.city;
+      const latitude = geoResponse.data.latitude;
+      const longitude = geoResponse.data.longitude;
 
+      // Fetch temperature data
+      const temperatureResponse = await axios.get('https://api.open-meteo.com/v1/forecast', {
+        params: {
+          latitude,
+          longitude,
+          hourly: 'temperature_2m',
+        },
+      });
+
+      const temperatureRaw = temperatureResponse.data;
+
+      const currentHour = new Date().getHours();
+
+      const temperature = temperatureRaw.hourly.temperature_2m[currentHour] 
+
+      // Construct greeting message
+      const greeting = `Hello, ${query.visitor_name}, the temperature is ${temperature} degrees Celsius in ${location}`;
+
+      // Return response object
       return {
         client_ip: ip,
-        location: geoData.data.city,
-        temperature,
-        greeting: `Hello, ${query.visitor_name.replace('" || \'', '')}, the temperature is ${temperature.data} degrees Celcius in New York`,
+        location,
+        greeting
       };
     } catch (err) {
-      console.log(err);
+      console.error('Error fetching data:', err);
+      throw err; // Rethrow the error or handle it according to your application's needs
     }
   }
 }
