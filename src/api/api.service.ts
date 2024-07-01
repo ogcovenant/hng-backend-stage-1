@@ -28,7 +28,7 @@ export class ApiService {
         client_ip: ip,
         location: geoData.data.city,
         temperature,
-        greeting: `Hello, ${query.visitor_name.replace('" || \'', '')}, the temperature is ${temperature.data.current.temp} degrees Celcius in New York`,
+        greeting: `Hello, ${query.visitor_name.replace('" || \'', '')}, the temperature is ${temperature.data} degrees Celcius in New York`,
       };
     } catch (err) {
       console.log(err);
