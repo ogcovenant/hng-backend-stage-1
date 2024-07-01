@@ -6,7 +6,7 @@ import axios from 'axios';
 export class ApiService {
   async hello(query: RequestDTO, ip: string){
 
-    const apiResponse = axios.get(`http://ipapi.co/json/`);
+    const apiResponse = await axios.get(`https://get.geojs.io/v1/ip.json`);
 
     return {
       client_ip: ip,
