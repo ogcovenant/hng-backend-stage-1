@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { RequestDTO } from './api.dto';
 import axios from 'axios';
-import { fetchWeatherApi } from 'openmeteo';
 
 @Injectable()
 export class ApiService {
@@ -12,10 +11,12 @@ export class ApiService {
     const latitude = geoData.data.latitude;
     const longitude = geoData.data.longitude; 
 
-    const temperature = await fetchWeatherApi('https://api.open-meteo.com/v1/forecast', {
-      latitude,
-      longitude,
-      hourly: "temperature_2m"
+    const temperature = await axios.get('https://api.open-meteo.com/v1/forecast', {
+      data: {
+        latitude: latitude,
+        longitude: longitude,
+        hourly: 'temperature_2m',
+      }
     })
 
     return {
