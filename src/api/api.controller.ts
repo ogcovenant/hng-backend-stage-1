@@ -11,6 +11,7 @@ export class ApiController {
   @Get('hello')
   hello(@Query() query: RequestDTO, @Req() req: Request) {
     const ip = reqIp.getClientIp(req) ?? "102.88.81.66";
+    console.log(ip)
     try{
       return this.apiService.hello(query, ip);
     }catch(err){
