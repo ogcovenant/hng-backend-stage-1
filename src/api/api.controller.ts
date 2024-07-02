@@ -10,9 +10,7 @@ export class ApiController {
 
   @Get('hello')
   hello(@Query() query: RequestDTO, @Req() req: Request) {
-    // const ip = reqIp.getClientIp(req);
-    // console.log(ip)
-    const ip = "102.88.81.66";
+    const ip = reqIp.getClientIp(req) ?? "102.88.81.66";
     try{
       return this.apiService.hello(query, ip);
     }catch(err){
